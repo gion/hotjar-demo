@@ -1,1 +1,100 @@
-view.html
+<html>
+
+<head>
+  <style>
+    #player {
+      box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.5);
+      margin: 0 auto;
+      width: 80vw;
+      height: 80vh;
+      min-width: 480px;
+      min-height: 480px;
+      position: relative;
+    }
+
+    #player::before {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      text-shadow: 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000;
+      z-index: 1;
+      content: attr(data-current-time) " (" attr(data-progress) "%)";
+      color: #fff;
+      padding: 1em;
+    }
+
+    #player::after {
+      opacity: 0;
+      pointer-events: none;
+      cursor: pointer;
+      text-align: center;
+      line-height: 80vh;
+      transition: all 300ms ease;
+      content: 'Pause';
+      font-size: 3em;
+      color: #fff;
+      font-family: tahoma;
+      top: 0;
+      left: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse farthest-corner at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 100%);
+    }
+
+    #player.paused::after {
+      opacity: 1;
+      content: 'Play';
+    }
+
+    #player:hover::after {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #iframe iframe {
+      border: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #controls {}
+
+    #progress {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section id="player" class="paused" data-progress="0" data-current-time="0">
+    <div id="iframe">
+      <iframe src="./index.html"></iframe>
+    </div>
+    <div id="graphics"></div>
+    <div id="controls">
+      <input type="range" id="progress" value="0" step="0.1" min="0" max="100">
+    </div>
+  </section>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+
+  <script>
+    // http://stackoverflow.com/questions/2420970/how-can-i-get-selector-from-jquery-object/15623322#15623322
+    !function (e, t) { var n = function (e) { var n = []; for (; e && e.tagName !== t; e = e.parentNode) { if (e.className) { var r = e.className.split(" "); for (var i in r) { if (r.hasOwnProperty(i) && r[i]) { n.unshift(r[i]); n.unshift(".") } } } if (e.id && !/\s/.test(e.id)) { n.unshift(e.id); n.unshift("#") } n.unshift(e.tagName); n.unshift(" > ") } return n.slice(1).join("") }; e.fn.getSelector = function (t) { if (true === t) { return n(this[0]) } else { return e.map(this, function (e) { return n(e) }) } } }(window.jQuery)
+
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/jquery.gsap.min.js"></script>  -->
+
+  <script src="player.js"></script>
+
+</body>
+
+</html>

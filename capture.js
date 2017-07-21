@@ -1,21 +1,3 @@
-class App {
-  constructor() {
-    this.addEventHandlers()
-  }
-
-  addEventHandlers() {
-    $(document).ready(this.start.bind(this))
-  }
-
-  start() {
-    this.capturer = new Capturer()
-  }
-
-  stop() {
-    this.capturer && this.capturer.removeEventHandlers()
-  }
-}
-
 class Capturer {
   constructor() {
     console.log('capturer enabled')
@@ -180,5 +162,3 @@ class Capturer {
     })
   }
 }
-
-const app = new App()

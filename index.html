@@ -67,5 +67,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
 <script src="capture.js"></script>
 
+<script>
+
+class App {
+  constructor() {
+    this.embeddedIframeDetected = window.parent !== window
+
+    // only bootstrap the capturing app if the page isn't contained in an iframe
+    if (!this.embeddedIframeDetected) {
+      this.addEventHandlers()
+    }
+  }
+
+  addEventHandlers() {
+    $(document).ready(this.start.bind(this))
+  }
+
+  start() {
+    this.capturer = new Capturer()
+  }
+
+  stop() {
+    this.capturer && this.capturer.removeEventHandlers()
+  }
+}
+
+const app = new App()
+</script>
+
 </body>
 </html>
