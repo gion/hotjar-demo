@@ -10,8 +10,11 @@ class Capturer {
     this.dom = {
       window: $(window),
       document: $(document),
-      body: $('body')
+      body: $('body'),
+      redirectLink: $('section:last a')
     }
+
+    this.dom.redirectLink.attr('href', `view.html#actions-${this.id}`)
 
     this.addAction = this.addAction.bind(this)
     this.processAction = this.processAction.bind(this)
@@ -53,19 +56,23 @@ class Capturer {
     this.dom.window
       .on('resize.capture', this.captureBrowserResize)
       .on('mousemove.capture', e => this.captureMouseAction(e, 'mousemove'))
-      .on('click.capture', e => this.captureMouseAction(e, 'click'))
-      .on('scroll.capture', this.captureScrollAction)
 
       // the following event handlers are delegated to the window
       // even though they are originally triggered on different elements
-      .on('scroll.capture', '*', this.captureScrollAction)
+      // .on('click.capture', '*', e => this.captureMouseAction(e, 'click'))
       .on('focus.capture', '*', this.captureFocusAction)
       .on('blur.capture', '*', this.captureBlurAction)
       .on('keypress.capture', '*', e => this.captureKeyAction(e, 'keypress'))
+
+      // the scroll event can't be delegated in jQuery because it normally doesn't bubble
+      // thus... good ol' addEventListener with capture flag turned on does the trick
+      document.addEventListener('scroll', this.captureScrollAction, true)
+      document.addEventListener('click', e => this.captureMouseAction(e, 'click'), true)
   }
 
   removeEventHandlers() {
     this.window.off('.capture')
+    document.removeEventListener('scroll', this.captureScrollAction, true)
   }
 
   addAction(action) {
@@ -111,8 +118,8 @@ class Capturer {
     this.addAction({
       type: type,
       data: {
-        height: this.dom.window.height(),
-        width: this.dom.window.width()
+        x: e.pageX,
+        y: e.pageY
       }
     })
   }
@@ -120,16 +127,16 @@ class Capturer {
   captureScrollAction(e) {
     let target = e.target
 
-    if (e.currentTarget === window) {
-      target = this.dom.body
+    if (!target || target === document) {
+      target = this.dom.body.get(0)
     }
 
     this.addAction({
       type: 'scroll',
       target: $(target).getSelector()[0],
       data: {
-        scrollTop: target.scrollTop,
-        scrollLeft: target.scrollLeft
+        y: target.scrollTop,
+        x: target.scrollLeft
       }
     })
   }

@@ -7,9 +7,8 @@
       margin: 0 auto;
       width: 80vw;
       height: 80vh;
-      min-width: 480px;
-      min-height: 480px;
       position: relative;
+      transform-origin: 50% 0;
     }
 
     #player::before {
@@ -23,25 +22,29 @@
       content: attr(data-current-time) " (" attr(data-progress) "%)";
       color: #fff;
       padding: 1em;
+      box-sizing: border-box;
     }
 
     #player::after {
       opacity: 0;
       pointer-events: none;
       cursor: pointer;
-      text-align: center;
-      line-height: 80vh;
+      text-shadow: 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000;
+
+      /* text-align: center; */
+      /* line-height: 80vh; */
       transition: all 300ms ease;
       content: 'Pause';
       font-size: 3em;
       color: #fff;
       font-family: tahoma;
-      top: 0;
-      left: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       position: absolute;
-      width: 100%;
+      /* width: 100%;
       height: 100%;
-      background: radial-gradient(ellipse farthest-corner at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 100%);
+      background: radial-gradient(ellipse farthest-corner at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 100%); */
     }
 
     #player.paused::after {
@@ -49,15 +52,29 @@
       content: 'Play';
     }
 
+    #player.paused #cursor {
+      display: none;
+    }
+
     #player:hover::after {
       opacity: 1;
       pointer-events: all;
+    }
+
+    #iframe {
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
     }
 
     #iframe iframe {
       border: 0;
       width: 100%;
       height: 100%;
+      transform-origin: 0 0;
     }
 
     #controls {}
@@ -65,19 +82,92 @@
     #progress {
       width: 100%;
     }
+
+    #graphics {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      transform-origin: 0 0;
+    }
+
+    #cursor {
+      display: block;
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: url(http://diysolarpanelsv.com/images/mouse-pointer-clipart-95.png) no-repeat top left;
+      background-size: contain;
+    }
+
+    #cursor::after {
+      content: 'click';
+      color: red;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: all 300ms ease-out;
+      font-weight: bold;
+      text-shadow: 0px 0px 4px #000;
+      opacity: 0;
+    }
+
+    #cursor.clicked::after {
+      animation: cursor-clicked 500ms ease;
+    }
+
+    @keyframes cursor-clicked {
+      0% {
+        opacity: 1;
+        text-shadow: 0px 0px 4px #000;
+        transform: scale(0.0001);
+      }
+
+      100% {
+        opacity: 0;
+        text-shadow: 10px 10px 8px #000;
+        transform: scale(4);
+      }
+    }
+
+    #menu ul::before {
+      content: 'Click on a recording:';
+    }
+
+    #menu ul:empty::before {
+      display: none;
+    }
+    #menu ul + p {
+      display: none;
+    }
+
+    #menu ul:empty + p {
+      display: inline-block;
+    }
+
   </style>
 </head>
-
 <body>
 
+  <section id="menu">
+    <ul></ul>
+    <p>No recordings yet :(. Go to <a href="./">this page</a> and record your behaviour (a few clicks here and there) first!</p>
+  </section>
   <section id="player" class="paused" data-progress="0" data-current-time="0">
     <div id="iframe">
       <iframe src="./index.html"></iframe>
     </div>
-    <div id="graphics"></div>
+    <div id="graphics">
+      <span id="cursor"></span>
+    </div>
     <div id="controls">
       <input type="range" id="progress" value="0" step="0.1" min="0" max="100">
     </div>
+  </section>
+  <section>
+    <p>Go to <a href="./">this page</a> and to generate more recordings ;)</p>
   </section>
 
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -91,6 +181,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/plugins/ScrollToPlugin.min.js"></script>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/jquery.gsap.min.js"></script>  -->
 
   <script src="player.js"></script>
