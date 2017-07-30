@@ -21,8 +21,6 @@ class Capturer {
     this.debouncedProcessAction = _.throttle(this.processAction, processActionDebounceTime, true)
 
     this.captureBrowserResize = this.captureBrowserResize.bind(this)
-    this.captureBlurAction = this.captureBlurAction.bind(this)
-    this.captureFocusAction = this.captureFocusAction.bind(this)
     this.captureKeyAction = this.captureKeyAction.bind(this)
     this.captureMouseAction = this.captureMouseAction.bind(this)
     this.captureScrollAction = this.captureScrollAction.bind(this)
@@ -56,26 +54,18 @@ class Capturer {
     this.dom.window
       .on('resize.capture', this.captureBrowserResize)
       .on('mousemove.capture', e => this.captureMouseAction(e, 'mousemove'))
+      .on('click.capture', e => this.captureKeyAction(e, 'click'))
+      .on('keydown.capture', e => this.captureKeyAction(e, 'keypress'))
 
-      // the following event handlers are delegated to the window
-      // even though they are originally triggered on different elements
-      // .on('click.capture', '*', e => this.captureMouseAction(e, 'click'))
-      .on('focus.capture', '*', this.captureFocusAction)
-      .on('blur.capture', '*', this.captureBlurAction)
-      .on('keypress.capture', '*', e => this.captureKeyAction(e, 'keypress'))
 
       // the scroll event can't be delegated in jQuery because it normally doesn't bubble
       // thus... good ol' addEventListener with capture flag turned on does the trick
       document.addEventListener('scroll', this.captureScrollAction, true)
-      document.addEventListener('click', e => this.captureMouseAction(e, 'click'), true)
-      document.addEventListener('keypress', e => this.captureKeyAction(e, 'keypress'), true)
   }
 
   removeEventHandlers() {
     this.window.off('.capture')
     document.removeEventListener('scroll', this.captureScrollAction, true)
-    document.removeEventListener('click', this.captureScrollAction, true)
-    document.removeEventListener('keypress', this.captureScrollAction, true)
   }
 
   addAction(action) {
@@ -89,7 +79,7 @@ class Capturer {
 
   processAction(action) {
     let isSameAsLastAction = this.lastAction && this.lastAction.type === action.type
-    let isMergebleAction = 'scroll resize mousemove'.split(' ').indexOf(action.type) !== -1
+    let isMergebleAction = 'resize mousemove'.split(' ').indexOf(action.type) !== -1
     let isNotFarApart = this.lastAction && action.timestamp - this.lastAction.timestamp > 500
 
     // if the action is the same type as the last processed one
@@ -141,22 +131,6 @@ class Capturer {
         y: target.scrollTop,
         x: target.scrollLeft
       }
-    })
-  }
-
-  captureFocusAction(e) {
-    this.addAction({
-      type: 'focus',
-      target: $(e.target).getSelector()[0],
-      data: {}
-    })
-  }
-
-  captureBlurAction(e) {
-    this.addAction({
-      type: 'blur',
-      target: $(e.target).getSelector()[0],
-      data: {}
     })
   }
 

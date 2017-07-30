@@ -15,12 +15,21 @@
       max-height: 400px;
       overflow: auto;
     }
+
+    input {
+      width: 100%;
+      font-size: 2em;
+    }
+
+    button::after {
+      content: " (clicked " attr(data-click-counter) " times)";
+    }
   </style>
 </head>
 <body>
 <h1>This is a title</h1>
 <section>
-  <button>this is a button</button>
+  <button data-click-counter="0" onclick="app.onClick()">click me!</button>
 </section>
 <section>
   <input type="text" placeholder="this is an input">
@@ -90,6 +99,13 @@ class App {
 
   addEventHandlers() {
     $(document).ready(this.start.bind(this))
+  }
+
+  onClick(e) {
+    let button = $('button')
+    let clickCount = button.attr('data-click-counter')
+
+    button.attr('data-click-counter', +clickCount + 1)
   }
 
   start() {
