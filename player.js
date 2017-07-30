@@ -108,7 +108,8 @@ class Player {
       }
 
       // let's make sure it's one of the supported types
-      return action.type === 'resize' || action.type === 'mousemove' || action.type === 'click' || action.type === 'scroll'
+      // return action.type === 'resize' || action.type === 'mousemove' || action.type === 'click' || action.type === 'scroll'
+      return true
     }
 
     return actions
@@ -158,7 +159,18 @@ class Player {
         })
 
       case 'resize':
-        return TweenMax.to({x: 0}, 0, {x: 1, onComplete:() => this.resize(action.data)})
+        return TweenMax.to({x: 0}, 0.1, {
+          x: 1,
+          onComplete:() => this.resize(action.data)
+        })
+
+      case 'keypress':
+        return TweenMax.to({x: 0}, 0.1, {
+          x: 1,
+          onComplete: () => {
+            this.dom.iframeElement(action.target).val(action.data.value)
+          }
+        })
     }
 
     return null;

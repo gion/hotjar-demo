@@ -68,11 +68,14 @@ class Capturer {
       // thus... good ol' addEventListener with capture flag turned on does the trick
       document.addEventListener('scroll', this.captureScrollAction, true)
       document.addEventListener('click', e => this.captureMouseAction(e, 'click'), true)
+      document.addEventListener('keypress', e => this.captureKeyAction(e, 'keypress'), true)
   }
 
   removeEventHandlers() {
     this.window.off('.capture')
     document.removeEventListener('scroll', this.captureScrollAction, true)
+    document.removeEventListener('click', this.captureScrollAction, true)
+    document.removeEventListener('keypress', this.captureScrollAction, true)
   }
 
   addAction(action) {
