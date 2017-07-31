@@ -1,0 +1,124 @@
+<html>
+<head>
+  <style>
+    html {
+      height: 100vh;
+      overflow: auto;
+    }
+
+    body {
+      max-width: 720px;
+      margin: 40px auto;
+    }
+
+    p {
+      max-height: 400px;
+      overflow: auto;
+    }
+
+    input {
+      width: 100%;
+      font-size: 2em;
+    }
+
+    button::after {
+      content: " (clicked " attr(data-click-counter) " times)";
+    }
+  </style>
+</head>
+<body>
+<h1>This is a title</h1>
+<section>
+  <button data-click-counter="0" onclick="app.onClick()">click me!</button>
+</section>
+<section>
+  <input type="text" placeholder="this is an input">
+</section>
+<section>
+  <a href="#">This is a link</a>
+</section>
+<section>
+  <h2>Hi! You should resize/scroll/click and maybe type something while you're here!</h2>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat lorem arcu, ut fermentum libero semper sed. Aliquam neque tellus, tristique quis mi sit amet, mattis semper elit. Sed sed tellus sed metus vestibulum dapibus sed eu diam. Quisque mattis orci sed nisi faucibus mattis. Morbi pellentesque, ex ac molestie congue, odio ligula scelerisque risus, at varius tortor lectus ut lacus. Phasellus ut congue sem, non euismod libero. Ut quis eleifend ex.
+    Sed vitae libero purus. Donec ullamcorper, elit in luctus suscipit, ex massa mattis ipsum, eget pellentesque urna urna eget orci. Nulla at porttitor erat, vitae lobortis massa. Vivamus nec egestas dui. Vivamus pellentesque mauris nec volutpat efficitur. Ut tincidunt metus quis dui consectetur, nec viverra sem fermentum. Nunc vitae mauris ac nibh blandit mattis. Fusce quis convallis mauris, vel cursus felis.
+    Integer facilisis sollicitudin ex eu venenatis. Suspendisse blandit, lorem a tincidunt iaculis, velit urna dignissim justo, sit amet porttitor justo neque eget tellus. Sed vel dapibus lacus, vel mattis ex. Mauris consequat eros id erat ultricies, non fermentum nibh venenatis. Ut aliquam tellus at pulvinar interdum. Fusce maximus, eros eu dapibus vestibulum, lacus urna porta metus, pulvinar interdum lectus lorem eget urna. Nulla eu euismod tellus.
+    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam a laoreet lacus. Aliquam et nibh quam. Proin viverra, justo et laoreet iaculis, dolor sapien ultricies ante, eget dignissim ipsum eros id risus. Nam vel tincidunt purus. Aenean mattis nisl sed ullamcorper rhoncus. Vestibulum vitae sollicitudin metus, eu pulvinar orci. Curabitur sollicitudin aliquet justo quis sollicitudin. Maecenas tincidunt efficitur elit, et ultricies ex feugiat et. Suspendisse dapibus justo dui, vitae condimentum orci pretium sed. Nulla sodales congue ex, sit amet scelerisque leo varius quis. Morbi mollis, augue id mattis blandit, nibh purus posuere neque, ut vulputate turpis dolor eu ante. Vivamus mattis pharetra massa et placerat. Nam vehicula hendrerit odio, et tincidunt sapien rhoncus vitae. Sed ac ex augue.
+    Aliquam erat volutpat. Etiam dignissim pretium nulla vel iaculis. Morbi aliquam, velit non tempor lobortis, risus nisl rutrum lacus, non sollicitudin neque risus in augue. Morbi eu sem magna. Morbi eu lectus nec leo ornare ornare. Vivamus hendrerit id purus nec eleifend. Nulla cursus mauris id sem ornare tincidunt. Donec iaculis posuere tortor, eu dapibus sem tristique id. Suspendisse fermentum mollis ante vel ornare. Etiam blandit tempor leo. In et fringilla mi. Maecenas ultrices hendrerit metus. Aliquam eu arcu id risus interdum vehicula.
+    <!-- Nunc luctus justo nec nulla pellentesque rutrum. Sed eleifend dolor vel viverra egestas. Cras pretium elit massa, id lacinia mauris bibendum vel. Morbi bibendum congue elit nec luctus. Sed nibh justo, sagittis at sem sed, rutrum congue dui. Aenean aliquet elit vitae dapibus tempor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin sed metus lacus. Nullam nec iaculis nisl. Quisque ipsum turpis, molestie at consequat vitae, cursus quis diam. Vivamus fringilla dolor et egestas volutpat.
+    Duis lorem leo, blandit ac venenatis sed, eleifend ut orci. Aliquam purus neque, malesuada id euismod eu, lacinia et elit. Nam at libero mattis, feugiat turpis eget, suscipit quam. In ac tristique turpis. Ut consectetur pellentesque maximus. Nullam aliquam rhoncus mauris sed mattis. Vivamus bibendum mi pulvinar ligula aliquam luctus. Praesent auctor purus non nibh gravida, a scelerisque arcu consequat. Quisque id quam nec leo hendrerit dapibus ut vitae turpis. Integer molestie fermentum risus. Suspendisse luctus, augue eu pellentesque laoreet, odio turpis laoreet quam, et placerat nisl lorem sed ipsum. Vivamus eget tellus efficitur, sodales ipsum id, pulvinar lacus. Nulla venenatis, neque at dapibus vulputate, ante ipsum luctus neque, lobortis laoreet quam metus blandit sem. Curabitur eros odio, bibendum et commodo nec, gravida quis tellus. Cras lobortis nisi porttitor facilisis ultricies.
+    Donec eu risus a diam facilisis vulputate. Praesent vitae posuere metus, sit amet rutrum neque. Nunc vestibulum consectetur varius. Donec nec metus a justo dictum tempus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas urna metus, dapibus vel egestas sit amet, euismod id mauris. Etiam luctus nunc sit amet tempor consectetur. Cras ut enim ipsum. Proin ut finibus mauris. Vestibulum eu feugiat nibh.
+    Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed ac ante lorem. Praesent pretium finibus dui, sed dictum magna fringilla vulputate. Nam cursus rhoncus lacus eget facilisis. Nullam vitae ipsum id eros vestibulum malesuada. Proin feugiat, metus in pretium tristique, turpis justo pretium mi, volutpat feugiat quam nisl sed nisi. In aliquam vel neque et dictum. In molestie tellus ac purus accumsan interdum id vitae est. Fusce sem velit, viverra id nisl eu, dapibus pellentesque ipsum. Fusce pretium tellus eget ipsum posuere viverra. Duis fringilla elit sed sem pellentesque eleifend.
+    Aliquam vel lacus mauris. Donec a malesuada felis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis a dignissim sem, sit amet facilisis nunc. Praesent bibendum, elit sed tincidunt pretium, turpis lacus tempor felis, vel ultrices leo ex vulputate massa. Phasellus iaculis posuere scelerisque. Vestibulum eu varius orci, non scelerisque mauris. Maecenas eget velit congue, viverra lectus ac, scelerisque mauris. Proin suscipit purus a cursus dapibus. Praesent elementum est et ultrices commodo. Vivamus semper metus et justo semper, ut interdum neque posuere. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+    Generated 10 paragraphs, 880 words, 5903 bytes of Lorem Ipsum -->
+  </p>
+</section>
+<section>
+  <img src="http://lorempixel.com/400/200/cats/3/" alt="this is an image" />
+</section>
+<section>
+  <a href="">Click here to view the recording!</a>
+</section>
+
+<!-- Hotjar Tracking Code for https://gion.github.io/hotjar-demo/ -->
+<script>
+    (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:569270,hjsv:5};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
+
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+
+<script>
+// http://stackoverflow.com/questions/2420970/how-can-i-get-selector-from-jquery-object/15623322#15623322
+!function(e,t){var n=function(e){var n=[];for(;e&&e.tagName!==t;e=e.parentNode){if(e.className){var r=e.className.split(" ");for(var i in r){if(r.hasOwnProperty(i)&&r[i]){n.unshift(r[i]);n.unshift(".")}}}if(e.id&&!/\s/.test(e.id)){n.unshift(e.id);n.unshift("#")}n.unshift(e.tagName);n.unshift(" > ")}return n.slice(1).join("")};e.fn.getSelector=function(t){if(true===t){return n(this[0])}else{return e.map(this,function(e){return n(e)})}}}(window.jQuery)
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+<script src="capture.js"></script>
+
+<script>
+
+class App {
+  constructor() {
+    this.embeddedIframeDetected = window.parent !== window
+
+    // only bootstrap the capturing app if the page isn't contained in an iframe
+    if (!this.embeddedIframeDetected) {
+      this.addEventHandlers()
+    }
+  }
+
+  addEventHandlers() {
+    $(document).ready(this.start.bind(this))
+  }
+
+  onClick(e) {
+    let button = $('button')
+    let clickCount = button.attr('data-click-counter')
+
+    button.attr('data-click-counter', +clickCount + 1)
+  }
+
+  start() {
+    this.capturer = new Capturer()
+  }
+
+  stop() {
+    this.capturer && this.capturer.removeEventHandlers()
+  }
+}
+
+const app = new App()
+</script>
+
+</body>
+</html>

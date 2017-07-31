@@ -1,0 +1,196 @@
+<html>
+
+<head>
+  <style>
+    #player {
+      box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.5);
+      margin: 0 auto;
+      width: 80vw;
+      height: 80vh;
+      position: relative;
+      transform-origin: 50% 0;
+    }
+
+    #player::before {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      text-shadow: 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000;
+      z-index: 1;
+      content: attr(data-current-time) " (" attr(data-progress) "%)";
+      color: #fff;
+      padding: 1em;
+      box-sizing: border-box;
+    }
+
+    #player::after {
+      opacity: 0;
+      pointer-events: none;
+      cursor: pointer;
+      text-shadow: 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000, 0 0 3em #000;
+
+      /* text-align: center; */
+      /* line-height: 80vh; */
+      transition: all 300ms ease;
+      content: 'Pause';
+      font-size: 3em;
+      color: #fff;
+      font-family: tahoma;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      position: absolute;
+      /* width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse farthest-corner at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 100%); */
+    }
+
+    #player.paused::after {
+      opacity: 1;
+      content: 'Play';
+    }
+
+    #player.paused #cursor {
+      display: none;
+    }
+
+    #player:hover::after {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #iframe {
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #iframe iframe {
+      border: 0;
+      width: 100%;
+      height: 100%;
+      transform-origin: 0 0;
+    }
+
+    #controls {
+      top: 100%;
+      position: absolute;
+      width: 100%;
+    }
+
+    #progress {
+      width: 100%;
+    }
+
+    #graphics {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      transform-origin: 0 0;
+    }
+
+    #cursor {
+      display: block;
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjJCMkY2Nzk2QzNDMTFFN0E2NTdGRkUyRkFDRkZDNzUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjJCMkY2N0E2QzNDMTFFN0E2NTdGRkUyRkFDRkZDNzUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCMkIyRjY3NzZDM0MxMUU3QTY1N0ZGRTJGQUNGRkM3NSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCMkIyRjY3ODZDM0MxMUU3QTY1N0ZGRTJGQUNGRkM3NSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkpDz2gAAAVBSURBVHja7JprSGNHFMcn8REfSbMa66um6vpoWaQJSCk+KItaCbqKHxQqC670g1RaxA9CrRRBLLaCL0Qqq6AstgpdW1tSbcVUi1ZRo6A1K4qi1EeMb+urra/pmeHeS+Km67qa6JU98De5c2+c+eXMmTkzEwHGGN0IIyDGqq2tNb4tsFa9F9XpArXBYHBh6nIGeYMkfAQh9md8fLyQqS8JFAay5RvINCGZnZ0dEovFtxiQfFDwdQcRnvr/NuSPn59fqE6nG5FKpbfh0gt0F+TKp2Cf3dvbw6yBZw5kMpkaHqsExYNEfPEIOjk5QVFRUWh4eJh4xm5kZCTe1dX1DtwKBb3FG48QT4hEIjK5EI9Qz+j1eiyXyzugLIP0PD4EO215WFgYBYEYwVNTUxRmbW0Ng4d+gPIEkIwXIKGhoRSEyMnJCU9OTlKY7e1t7O/v/w2Uv33ReLE6CJGjoyPWarUcjEKhqIHy13kHQiQQCPDQ0BCFOT4+xkqlsvgiXrkyEFYDAwMUBkY38twnvAUh0mg0HExkZORHvAUh6ujo4CZOmHc+4C0IUVtbGwejUqlSeQtC1NLSwsEkJCSk8BaEqLGxkYNJTU29z1sQooaGBg4mLS3tPm9BiOrr641hUnkLQlRZWcnBZGdnZ5iDsLGxuXSQS1/CZmVlIZj5EUCg8vLyh8HBwbabm5tfeXl5IU9PTxQUFIRgWWCdNP4iHmFVVlaGjezjy/aAxbuWsZKTk/Hu7i4Lk2tJkBfuWiEhIQiGWrSzs2P2/tHREVpeXkZLS0soMDCQFH3B7MZ8brUV4vN4xMfHB7+gfQeSXBuPLCwsoIyMDFRTU0Ovq6urn0CqfwCyN96pJFm/UChcAc3BCvMwJibGA8r9QX9ciUfEYjFuamrCLi4uJuUGg4FNT76Ga7J9FA56l9Fd5pVbhKnV6qsLdmdnZzwxMUEbXFpaanIvLi6OlkNM/G1nZ8c22AkkZiRhXqn3wTNoZWXF+iAymYzbTWEN5gITmLGxMVpeUVFR/Ty9YHBw0Lq7KG5ubnh+fp42Eirfbm1t/Yt5bwISERHBQXp4eLx2Fsjo6Kh1QMj6HLoJ1/9nZmb+hfp/Aj1mG5yUlGQC09fXR8ubm5sfXwsQskuSmJiIdTodbRjExj8SieRXqP9HUHpBQcEjUr6+vm4ColAoOK8EBATcfhbI6uqq5UH29/e5Bo2Pj++IRKLvoe6fQfWgd0D2MMnNkfuFhYUmMO3t7fRzsAxuexYIpPwWB5lhIcD9ow4ODpmMJ6g3QK+ShkRHR7/HPufu7m52klQqlXeuMo2nINPT0xpbW1sysT0AkW71KTNHcNbV1fU7ebazs9PEK3V1dRSkv7//N2uCCE4dhpKLJzAKhUDwkuvPQOQo7lvQgPGD3t7ewYuLi5PkvUqlQtCtaLlUKqXzhL29PYL1fOLW1pYaBo+nQNLT0y2aa9VrtVp299Ad9D7oHnOe+JSVlJTQwIeYMfFKVVUV28MeWTp9/7+uhVJSuI0Q0vg3GSCzBt+0O2S/BzRHz83lQDIzM9mt1fLDw0NkThYFISk5zB9sO8khkN1ZHoUcK5/9+vPy8nBOTg7u7u6m18XFxV9eSYzMzc0hX1/f8/ZOp97e3onw8HD56RsajeYhzDsfmvtQT0/PpYaISRoPIxVN6sjx2zlsHxZY+UVFRblsCk9OH8CzsxsbG7/ExsYic8F+2WbiEb1ej+Ry+XlBEHPi+wboFXa5Qka/swYZi3nkArbFLJRs2JUu8/MPq/3QRXBTflQjRDfEXoK8BLGQ/SfAACckL+MO2o/4AAAAAElFTkSuQmCC) no-repeat top left;
+      background-size: contain;
+    }
+
+    #cursor::after {
+      content: 'click';
+      color: red;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: all 300ms ease-out;
+      font-weight: bold;
+      text-shadow: 0px 0px 4px #000;
+      opacity: 0;
+    }
+
+    #cursor.clicked::after {
+      animation: cursor-clicked 500ms ease;
+    }
+
+    @keyframes cursor-clicked {
+      0% {
+        opacity: 1;
+        text-shadow: 0px 0px 4px #000;
+        transform: scale(0.0001);
+      }
+
+      100% {
+        opacity: 0;
+        text-shadow: 10px 10px 8px #000;
+        transform: scale(4);
+      }
+    }
+
+    #menu ul::before {
+      content: 'Click on a recording:';
+    }
+
+    #menu ul:empty::before {
+      display: none;
+    }
+    #menu ul + p {
+      display: none;
+    }
+
+    #menu ul:empty + p {
+      display: inline-block;
+    }
+
+  </style>
+</head>
+<body>
+
+  <section id="menu">
+    <ul></ul>
+    <p>No recordings yet :(. Go to <a href="./">this page</a> and record your behaviour (a few clicks here and there) first!</p>
+  </section>
+  <section id="player" class="paused" data-progress="0" data-current-time="0">
+    <div id="iframe">
+      <iframe src="./index.html" scrolling="no"></iframe>
+    </div>
+    <div id="graphics">
+      <span id="cursor"></span>
+    </div>
+    <div id="controls">
+      <input type="range" id="progress" value="0" step="0.1" min="0" max="100">
+    </div>
+  </section>
+  <section>
+    <p>Go to <a href="./">this page</a> and to generate more recordings ;)</p>
+  </section>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+
+  <script>
+    // http://stackoverflow.com/questions/2420970/how-can-i-get-selector-from-jquery-object/15623322#15623322
+    !function (e, t) { var n = function (e) { var n = []; for (; e && e.tagName !== t; e = e.parentNode) { if (e.className) { var r = e.className.split(" "); for (var i in r) { if (r.hasOwnProperty(i) && r[i]) { n.unshift(r[i]); n.unshift(".") } } } if (e.id && !/\s/.test(e.id)) { n.unshift(e.id); n.unshift("#") } n.unshift(e.tagName); n.unshift(" > ") } return n.slice(1).join("") }; e.fn.getSelector = function (t) { if (true === t) { return n(this[0]) } else { return e.map(this, function (e) { return n(e) }) } } }(window.jQuery)
+
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/plugins/ScrollToPlugin.min.js" defer async></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/jquery.gsap.min.js"></script>  -->
+
+  <script src="player.js"></script>
+  <script src="app.js"></script>
+
+</body>
+
+</html>
