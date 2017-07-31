@@ -16,3 +16,6 @@ For the first part, you need to head to [the root page](https://gion.github.io/h
 
 The *fun* part happens when you try to view any previous recorded user activity by going to [the view page](https://gion.github.io/hotjar-demo/view.html). Here you can select which recording you want to see and control it like a video (play/pause/seek).
 You should see an exact replica of how you've previously interacted with the first page.
+
+### Demo:
+[![video recording](https://gallery.allcal.com/photos/live/1501534436624-size=large)](https://www.youtube.com/watch?v=JXplnxcm1nk&feature=youtu.be)
